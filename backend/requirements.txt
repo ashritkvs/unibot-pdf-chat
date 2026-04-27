@@ -1,15 +1,13 @@
-fastapi
-uvicorn
-langchain
-langchain-classic
-langchain-community
-langchain-openai
-langchain-pinecone
-langchain-text-splitters
-openai
-pinecone-client
-python-dotenv
-pypdf
-python-multipart
+Replace backend/requirements.txt with exactly this:
 
-
+fastapi==0.115.0
+uvicorn==0.30.6
+python-dotenv==1.0.1
+python-multipart==0.0.9
+langchain-openai==0.2.0
+langchain-pinecone==0.2.0
+langchain-community==0.3.0
+langchain-text-splitters==0.3.0
+langchain-classic==1.0.4
+pinecone==5.0.1
+pypdf==4.3.1
