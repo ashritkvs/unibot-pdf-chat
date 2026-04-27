@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
 
 const ChatBot = () => {
-  const API_BASE = 'http://localhost:8000';
+  const API_BASE = 'https://unibot-backend-a155.onrender.com';
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
