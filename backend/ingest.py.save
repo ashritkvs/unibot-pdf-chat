@@ -1,0 +1,77 @@
+import os
+from dotenv import load_dotenv
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import Pinecone
+from pinecone import Pinecone as PineconeClient
+
+# Load environment variables
+load_dotenv()
+
+# Set up Pinecone client
+pc = PineconeClient(api_key=os.getenv("PINECONE_API_KEY"))
+index_name = os.getenv("PINECONE_INDEX")
+
+# Check that index exists
+if index_name not in pc.list_indexes().names():
+    print(f"❌ Index '{index_name}' not found. Please create it in Pinecone dashboard.")
+    exit()
+
+# Load the PDF document
+loader = PyPDFLoader("docs/student_guide.pdf")
+documents = loader.load()
+
+# Split into chunks
+splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+chunks = splitter.split_documents(documents)
+
+# Generate OpenAI embeddings
+embeddings = OpenAIEmbeddings()
+
+# Upload to Pinecone
+vectorstore = Pinecone.from_documents(
+    documents=chunks,
+    embedding=embeddings,
+    index_name=index_name
+)
+
+print("✅ Document uploaded and embedded into Pinecone!")
+
+import os
+from dotenv import load_dotenv
+from langchain.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import Pinecone
+import pinecone
+
+# Load environment variables
+load_dotenv()
+
+# Initialize Pinecone
+pinecone.init(
+    api_key=os.getenv("PINECONE_API_KEY"),
+    environment=os.getenv("PINECONE_ENV")
+)
+
+# Load your PDF file (you can change this filename)
+loader = PyPDFLoader("docs/student_guide.pdf")
+documents = loader.load()
+
+# Split the text into chunks
+splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+chunks = splitter.split_documents(documents)
+
+# Embed the chunks
+embeddings = OpenAIEmbeddings()
+
+# Upload to Pinecone index
+Pinecone.from_documents(
+    chunks,
+    embeddings,
+    index_name=os.getenv("PINECONE_INDEX")
+)
+
+print("✅ Document uploaded and embedded into Pinecone!")
+
